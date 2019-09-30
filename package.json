@@ -5,13 +5,20 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "rn-debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
   },
   "dependencies": {
     "expo": "^34.0.1",
+    "expo-sensors": "~6.0.0",
+    "matter": "^0.2.0",
+    "matter-js": "^0.14.2",
+    "random-int": "^2.0.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native-elements": "^1.2.3",
+    "react-native-game-engine": "^0.12.3",
     "react-native-web": "^0.11.4"
   },
   "devDependencies": {
