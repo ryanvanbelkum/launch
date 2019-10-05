@@ -15,7 +15,7 @@ const Tilt = (state, { events }) => {
     } else if(xPos <= 0 && e.x < 0){
         xPos = 0;
     } else {
-        xPos = xPos + (e.x * 20);
+        xPos = xPos + (e.x * 15);
     }
 
     Matter.Body.setPosition(rocket.body, {
@@ -26,13 +26,18 @@ const Tilt = (state, { events }) => {
     return state;
 };
 
-const Fall = (state ) => {
-    // let star = state["star"];
-    // Matter.Body.setPosition(star.body, {
-    //     y: height - 200
-    // });
+const Trajectory = (entities) => {
+    const obstacles = Object.values(entities).filter(item => item.body && item.body.label === "obstacle");
 
-    return state;
+    obstacles.forEach(item => {
+        // console.log(item);
+        Matter.Body.setPosition(item.body, {
+            x: item.body.position.x + (item.trajectory),
+            y: item.body.position.y
+        });
+    });
+
+    return entities;
 };
 
 const Physics = (entities, { time }) => {
@@ -42,4 +47,4 @@ const Physics = (entities, { time }) => {
     return entities;
 };
 
-export { Tilt, Physics, Fall };
+export { Tilt, Physics, Trajectory };
