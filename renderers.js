@@ -4,6 +4,7 @@ import { StyleSheet, Dimensions, View, Image } from "react-native";
 import rocket from "./assets/images/rocketwithflames.gif";
 import satellite from "./assets/images/satellite.png";
 import planet from "./assets/images/planet.png";
+import ufo from "./assets/images/ufo.gif";
 
 import star from "./assets/images/star.png";
 
@@ -11,9 +12,11 @@ const { height, width } = Dimensions.get("window");
 
 const BODY_DIAMETER = Math.trunc(Math.max(width, height) * 0.05);
 
-const Rocket = ({ body }) => {
+const Rocket = ({ body, size }) => {
   const { position } = body;
-  let x = position.x - BODY_DIAMETER / 2;
+  const sizeWidth = size[0];
+  const sizeHeight = size[1];
+  const x = position.x - BODY_DIAMETER / 2;
   const y = position.y;
 
   return (
@@ -23,15 +26,19 @@ const Rocket = ({ body }) => {
         styles.rocket,
         {
           left: x,
-          top: y
+          top: y,
+          width: sizeWidth,
+          height: sizeHeight
         }
       ]}
     />
   );
 };
 
-const Satellite = ({ body }) => {
+const Satellite = ({ body, size }) => {
   const { position } = body;
+  const sizeWidth = size[0];
+  const sizeHeight = size[1];
   let x = position.x - BODY_DIAMETER / 2;
   const y = position.y;
 
@@ -42,14 +49,18 @@ const Satellite = ({ body }) => {
         styles.satellite,
         {
           left: x,
-          top: y
+          top: y,
+          width: sizeWidth,
+          height: sizeHeight
         }
       ]}
     />
   );
 };
 
-const Planet = ({ body }) => {
+const Planet = ({ body, size }) => {
+  const sizeWidth = size[0];
+  const sizeHeight = size[1];
   const { position } = body;
   let x = position.x - BODY_DIAMETER / 2;
   const y = position.y;
@@ -61,7 +72,9 @@ const Planet = ({ body }) => {
         styles.satellite,
         {
           left: x,
-          top: y
+          top: y,
+          width: sizeWidth,
+          height: sizeHeight
         }
       ]}
     />
@@ -91,7 +104,27 @@ const Star = ({ body, size, opacity }) => {
   );
 };
 
-const Box = ({ body, size, color }) => {
+const UFO = ({ body, size }) => {
+  const sizeWidth = size[0];
+  const sizeHeight = size[1];
+  const x = body.position.x - sizeWidth / 2;
+  const y = body.position.y - sizeHeight / 2;
+
+  return (
+    <Image
+      source={ufo}
+      style={[
+        styles.ufo,
+        {
+          left: x,
+          top: y
+        }
+      ]}
+    />
+  );
+};
+
+const Floor = ({ body, size }) => {
   const width = size[0];
   const height = size[1];
 
@@ -106,7 +139,7 @@ const Box = ({ body, size, color }) => {
         top: y,
         width: width,
         height: height,
-        backgroundColor: color
+        backgroundColor: "transparent"
       }}
     />
   );
@@ -119,11 +152,14 @@ const styles = StyleSheet.create({
     position: "absolute"
   },
   satellite: {
+    position: "absolute"
+  },
+  planet: {
     width: 75,
     height: 50,
     position: "absolute"
   },
-  planet: {
+  ufo: {
     width: 75,
     height: 50,
     position: "absolute"
@@ -133,4 +169,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { Rocket, Box, Star, Satellite, Planet };
+export { Rocket, Floor, Star, Satellite, Planet, UFO };
