@@ -1,12 +1,26 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 
-const Score = () => {
+const Score = ({score}) => {
     return (
-        <View>
-
+        <View style={styles.container}>
+            <Text style={styles.text}>{score || 0}</Text>
         </View>
     );
 };
+
+
+const styles = StyleSheet.create({
+    container: {
+        alignSelf: 'flex-start',
+        borderRadius: 10,
+        margin: 25,
+        backgroundColor: 'white'
+    },
+    text: {
+        fontSize: 20,
+        padding: 10,
+    }
+});
 
 export default Score;

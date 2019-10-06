@@ -7,24 +7,38 @@ import randomInt from "random-int";
 import { Rocket, Floor, Star, Satellite, Planet, UFO } from "./renderers";
 import { Tilt, Physics, Trajectory } from "./systems";
 import { Accelerometer } from "expo-sensors";
+import Score from "./Score";
 
 const STAR_COUNT = 20;
-const COMPLEXITY = 3;
 const { width, height } = Dimensions.get("window");
 
 class App extends PureComponent {
+  state = {
+    complexity: 3,
+    score: 0
+  };
+
   componentDidMount() {
     this._subscription = Accelerometer.addListener(({ x }) => {
       Matter.Body.set(this.refs.engine.state.entities.rocket.body, {
         tilt: x
       });
     });
+
+    this.incrementScore();
   }
 
   componentWillUnmount() {
     this._subscription && this._subscription.remove();
     this._subscription = null;
   }
+
+  incrementScore = () => {
+    this.setState(
+      ({ score }) => ({ score: score + 1 }),
+      () => setTimeout(this.incrementScore, 50)
+    );
+  };
 
   setupCollisionHandler = engine => {
     Matter.Events.on(engine, "collisionStart", event => {
@@ -83,8 +97,8 @@ class App extends PureComponent {
     const body = Matter.Bodies.rectangle(
       randomInt(1, width - 50),
       randomInt(0, -200),
-        75,
-        50,
+      75,
+      50,
       {
         frictionAir: 0.05,
         label: "obstacle",
@@ -100,8 +114,8 @@ class App extends PureComponent {
     const body = Matter.Bodies.rectangle(
       randomInt(1, width - 50),
       randomInt(0, -200),
-        60,
-        40,
+      60,
+      40,
       {
         frictionAir: 0.05,
         label: "obstacle",
@@ -117,8 +131,8 @@ class App extends PureComponent {
     const body = Matter.Bodies.rectangle(
       randomInt(1, width - 50),
       randomInt(0, -200),
-        50,
-        20,
+      50,
+      20,
       {
         frictionAir: 0.05,
         label: "obstacle",
@@ -135,7 +149,7 @@ class App extends PureComponent {
     const obstacles = {};
     const bodies = [];
 
-    for (let i = 0; i < COMPLEXITY; i++) {
+    for (let i = 0; i < this.state.complexity; i++) {
       const ind = randomInt(0, 2);
       const { obstacle, body } = options[ind]();
       Object.assign(obstacles, { ["obstacle_" + i]: obstacle });
@@ -148,14 +162,12 @@ class App extends PureComponent {
   render() {
     const engine = Matter.Engine.create({ enableSleeping: false });
     const world = engine.world;
-    const rocket = Matter.Bodies.rectangle(
-      width / 2,
-      height - 200,
-      50,
-      50,
-      { isStatic: true, tilt: 0, label: "rocket" }
-    );
-    const floor = Matter.Bodies.rectangle(width / 2, height, width, 10, {
+    const rocket = Matter.Bodies.rectangle(width / 2, height - 200, 50, 50, {
+      isStatic: true,
+      tilt: 0,
+      label: "rocket"
+    });
+    const floor = Matter.Bodies.rectangle(width / 2, height, width + 100, 10, {
       isStatic: true,
       isSensor: true,
       label: "floor"
@@ -181,11 +193,12 @@ class App extends PureComponent {
           rocket: { body: rocket, size: [50, 115], renderer: Rocket },
           floor: {
             body: floor,
-            size: [width, 5],
+            size: [width + 100, 5],
             renderer: Floor
           }
         }}
       >
+        <Score score={this.state.score} />
         <StatusBar hidden={true} />
       </GameEngine>
     );
