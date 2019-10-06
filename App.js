@@ -37,21 +37,33 @@ class App extends PureComponent {
                     y: 0
                 });
             }
+
+            if (objA === 'obstacle' && objB === 'floor') {
+                console.log('obstacle');
+                Matter.Body.set(pairs[0].bodyA, {
+                    trajectory: randomInt(-5, 5) / 10
+                });
+                Matter.Body.setPosition(pairs[0].bodyA, {
+                    x: randomInt(1, width - 30),
+                    y: 0
+                });
+            }
         });
     };
 
     get stars() {
         let stars = {};
         for (let x = 1; x <= STAR_COUNT; x++) {
+            const size = randomInt(10, 20);
             Object.assign(stars, {
                 ['star_' + x]: {
-                    body: Matter.Bodies.rectangle(randomInt(1, width - 30), randomInt(0, height), boxSize, boxSize, {
+                    body: Matter.Bodies.rectangle(randomInt(1, width - 30), randomInt(0, height), size, size, {
                         frictionAir: .2,
                         isSensor: true,
                         label: 'star'
                     }),
                     opacity: randomInt(1, 5) / 10,
-                    size: [boxSize, boxSize],
+                    size: [size, size],
                     renderer: Star
                 }
             });
@@ -66,7 +78,8 @@ class App extends PureComponent {
         const rocket = Matter.Bodies.rectangle(width / 2, height - 200, boxSize, boxSize, {isStatic: true});
         const satellite = Matter.Bodies.rectangle(randomInt(1, width - 50), 0, 75, 50, {
             frictionAir: .05,
-            label: "obstacle"
+            label: "obstacle",
+            trajectory: randomInt(-5, 5) / 10
         });
         const floor = Matter.Bodies.rectangle(width / 2, height, width, 10, {
             isStatic: true,
@@ -91,7 +104,7 @@ class App extends PureComponent {
                     },
                     ...stars,
                     rocket: {body: rocket, size: [boxSize, boxSize], position: [40, 200], renderer: Rocket},
-                    satellite: {body: satellite, size: [boxSize, boxSize], renderer: Satellite, trajectory: .25},
+                    satellite: {body: satellite, size: [boxSize, boxSize], renderer: Satellite},
                     floor: {body: floor, size: [width, boxSize], color: "#86E9BE", renderer: Box}
                 }}>
 

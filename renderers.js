@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, View, Image } from "react-native";
 
 import rocket from './assets/images/rocketwithflames.gif';
 import satellite from './assets/images/satellite.png';
+import planet from './assets/images/planet.png';
 
 import star from './assets/images/star.png';
 
@@ -62,6 +63,8 @@ const Star = ({body, size, opacity}) => {
                 {
                     left: x,
                     top: y,
+                    width: sizeWidth,
+                    height: sizeHeight,
                     opacity
                 }
             ]}
@@ -103,8 +106,6 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     star: {
-        width: 20,
-        height: 20,
         position: "absolute"
     }
 });
