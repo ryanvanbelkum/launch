@@ -40,14 +40,13 @@ class App extends PureComponent {
                 });
             }
 
-            if (objA === 'obstacle' && objB === 'floor') {
-                console.log('obstacle');
-                Matter.Body.set(pairs[0].bodyA, {
+            if (objA === 'floor' && objB === 'obstacle') {
+                Matter.Body.set(pairs[0].bodyB, {
                     trajectory: randomInt(-5, 5) / 10
                 });
-                Matter.Body.setPosition(pairs[0].bodyA, {
+                Matter.Body.setPosition(pairs[0].bodyB, {
                     x: randomInt(1, width - 30),
-                    y: 0
+                    y: randomInt(0, -200)
                 });
             }
         });
@@ -71,33 +70,61 @@ class App extends PureComponent {
             });
         }
 
-        return stars;
+        const starsInWorld = Object.values(stars).map(star => star.body);
+        return {stars, starsInWorld};
+    }
+
+    getSatellite() {
+        const body = Matter.Bodies.rectangle(randomInt(1, width - 50), 0, 75, 50, {
+            frictionAir: .05,
+            label: "obstacle",
+            trajectory: randomInt(-5, 5) / 10
+        });
+        const satellite = {body, size: [boxSize, boxSize], renderer: Satellite};
+
+        return {obstacle: satellite, body};
+    }
+
+    getPlanet() {
+        const body = Matter.Bodies.rectangle(randomInt(1, width - 50), 0, 75, 50, {
+            frictionAir: .05,
+            label: "obstacle",
+            trajectory: randomInt(-5, 5) / 10
+        });
+        const planet = {body, size: [boxSize, boxSize], renderer: Planet};
+
+        return {obstacle: planet, body};
+    }
+
+    get obstacles() {
+        const options = [this.getSatellite, this.getPlanet];
+        const obstacles = {};
+        const bodies = [];
+
+        for(let i = 0; i <= COMPLEXITY; i++) {
+            const ind = randomInt(0, 1);
+            const {obstacle, body} = options[ind]();
+            Object.assign(obstacles, {['obstacle_' + i]: obstacle});
+            bodies.push(body);
+        }
+
+        return {obstacles, bodies};
     }
 
     render() {
         const engine = Matter.Engine.create({enableSleeping: false});
         const world = engine.world;
-        const rocket = Matter.Bodies.rectangle(width / 2, height - 200, boxSize, boxSize, {isStatic: true, tilt: 0});
-        const satellite = Matter.Bodies.rectangle(randomInt(1, width - 50), 0, 75, 50, {
-            frictionAir: .05,
-            label: "obstacle",
-            trajectory: randomInt(-5, 5) / 10
-        });
-        const planet = Matter.Bodies.rectangle(randomInt(1, width - 50), 0, 75, 50, {
-            frictionAir: .05,
-            label: "obstacle",
-            trajectory: randomInt(-5, 5) / 10
-        });
+        const rocket = Matter.Bodies.rectangle(width / 2, height - 200, boxSize, boxSize, {isStatic: true, tilt: 0, label: 'rocket'});
         const floor = Matter.Bodies.rectangle(width / 2, height, width, 10, {
             isStatic: true,
             isSensor: true,
             label: "floor"
         });
-        const stars = this.stars;
-        const starsInWorld = Object.values(stars).map(star => star.body);
+        const {obstacles, bodies} = this.obstacles;
+        const {stars, starsInWorld} = this.stars;
 
         this.setupCollisionHandler(engine);
-        Matter.World.add(world, [rocket, floor, satellite, planet, ...starsInWorld]);
+        Matter.World.add(world, [rocket, floor, ...bodies, ...starsInWorld]);
 
         return (
             <GameEngine
@@ -110,14 +137,11 @@ class App extends PureComponent {
                         world
                     },
                     ...stars,
+                    ...obstacles,
                     rocket: {body: rocket, size: [boxSize, boxSize], renderer: Rocket},
-                    satellite: {body: satellite, size: [boxSize, boxSize], renderer: Satellite},
-                    planet: {body: planet, size: [boxSize, boxSize], renderer: Planet},
                     floor: {body: floor, size: [width, boxSize], color: "#86E9BE", renderer: Box}
                 }}>
-
                 <StatusBar hidden={true}/>
-
             </GameEngine>
         );
     }
