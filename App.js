@@ -4,7 +4,7 @@ import {GameEngine} from "react-native-game-engine";
 import Matter from "matter-js";
 import randomInt from 'random-int';
 
-import {Rocket, Box, Star, Satellite} from "./renderers";
+import {Rocket, Box, Star, Satellite, Planet} from "./renderers";
 import {Tilt, Physics, Trajectory} from "./systems"
 import {Accelerometer} from "expo-sensors";
 
@@ -15,8 +15,10 @@ const boxSize = Math.trunc(Math.max(width, height) * 0.005);
 
 class App extends PureComponent {
     componentDidMount() {
-        this._subscription = Accelerometer.addListener(({x, y}) => {
-            this.refs.engine.publishEvent({type: "accelerometer", x, y});
+        this._subscription = Accelerometer.addListener(({x}) => {
+            Matter.Body.set(this.refs.engine.state.entities.rocket.body, {
+                tilt: x
+            });
         });
     }
 
@@ -75,8 +77,13 @@ class App extends PureComponent {
     render() {
         const engine = Matter.Engine.create({enableSleeping: false});
         const world = engine.world;
-        const rocket = Matter.Bodies.rectangle(width / 2, height - 200, boxSize, boxSize, {isStatic: true});
+        const rocket = Matter.Bodies.rectangle(width / 2, height - 200, boxSize, boxSize, {isStatic: true, tilt: 0});
         const satellite = Matter.Bodies.rectangle(randomInt(1, width - 50), 0, 75, 50, {
+            frictionAir: .05,
+            label: "obstacle",
+            trajectory: randomInt(-5, 5) / 10
+        });
+        const planet = Matter.Bodies.rectangle(randomInt(1, width - 50), 0, 75, 50, {
             frictionAir: .05,
             label: "obstacle",
             trajectory: randomInt(-5, 5) / 10
@@ -90,7 +97,7 @@ class App extends PureComponent {
         const starsInWorld = Object.values(stars).map(star => star.body);
 
         this.setupCollisionHandler(engine);
-        Matter.World.add(world, [rocket, floor, satellite, ...starsInWorld]);
+        Matter.World.add(world, [rocket, floor, satellite, planet, ...starsInWorld]);
 
         return (
             <GameEngine
@@ -103,8 +110,9 @@ class App extends PureComponent {
                         world
                     },
                     ...stars,
-                    rocket: {body: rocket, size: [boxSize, boxSize], position: [40, 200], renderer: Rocket},
+                    rocket: {body: rocket, size: [boxSize, boxSize], renderer: Rocket},
                     satellite: {body: satellite, size: [boxSize, boxSize], renderer: Satellite},
+                    planet: {body: planet, size: [boxSize, boxSize], renderer: Planet},
                     floor: {body: floor, size: [width, boxSize], color: "#86E9BE", renderer: Box}
                 }}>
 

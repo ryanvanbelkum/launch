@@ -4,19 +4,17 @@ import randomInt from "random-int";
 
 const { width, height } = Dimensions.get('window');
 
-const Tilt = (state, { events }) => {
-    let e = events.find(x => x.type === "accelerometer");
-    if (!e) return state;
-
+const Tilt = (state) => {
     let rocket = state["rocket"];
+    let xTilt = rocket.body.tilt;
     let xPos = rocket.body.position.x;
 
-    if(xPos >= width - 50 && e.x > 0) {
+    if(xPos >= width - 25 && xTilt > 0) {
         xPos = width - 25;
-    } else if(xPos <= 0 && e.x < 0){
+    } else if(xPos <= 0 && xTilt < 0){
         xPos = 0;
     } else {
-        xPos = xPos + (e.x * 15);
+        xPos = xPos + (xTilt * 5);
     }
 
     Matter.Body.setPosition(rocket.body, {

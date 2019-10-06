@@ -49,6 +49,25 @@ const Satellite = ({body}) => {
     );
 };
 
+const Planet = ({body}) => {
+    const {position} = body;
+    let x = position.x - BODY_DIAMETER / 2;
+    const y = position.y;
+
+    return (
+        <Image
+            source={planet}
+            style={[
+                styles.satellite,
+                {
+                    left: x,
+                    top: y
+                }
+            ]}
+        />
+    );
+};
+
 const Star = ({body, size, opacity}) => {
     const sizeWidth = size[0];
     const sizeHeight = size[1];
@@ -105,9 +124,14 @@ const styles = StyleSheet.create({
         height: 50,
         position: "absolute"
     },
+    planet: {
+        width: 75,
+        height: 50,
+        position: "absolute"
+    },
     star: {
         position: "absolute"
     }
 });
 
-export { Rocket, Box, Star, Satellite };
+export { Rocket, Box, Star, Satellite, Planet };
