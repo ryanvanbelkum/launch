@@ -1,26 +1,25 @@
 import React, {PureComponent} from "react";
-import {StyleSheet, StatusBar, Dimensions} from "react-native";
+import {StyleSheet, StatusBar, Dimensions, ImageBackground} from "react-native";
 import {GameEngine} from "react-native-game-engine";
 import Matter from "matter-js";
 import randomInt from "random-int";
+import { Overlay, Text, Button, Icon } from 'react-native-elements';
 
 import {Rocket, Floor, Star, Satellite, Planet, UFO} from "./renderers";
 import {Tilt, Physics, Trajectory} from "./systems";
 import {Accelerometer} from "expo-sensors";
 import Score from "./Score";
+import overlayBack from './assets/images/overlay-back.png';
 
 const STAR_COUNT = 20;
 const {width, height} = Dimensions.get("window");
+
 
 class App extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = {
-            complexity: 3,
-            score: 0,
-            entities: this.entities
-        };
+        this.state = this.initState;
     }
 
     componentDidMount() {
@@ -58,16 +57,25 @@ class App extends PureComponent {
         this._subscription = null;
     }
 
-    incrementScore = () => {
-        this.setState(
-            ({score}) => {
-                const increase = Math.floor(score / 10);
-                const complexity = increase < 3 ? 3 : increase;
+    reloadApp = () => {
+        this.setState(this.initState, () => {
+            this.refs.engine.swap(this.entities);
+            this.incrementScore();
+        });
+    };
 
-                return {score: score + 1, complexity};
-            },
-            () => setTimeout(this.incrementScore, 100)
-        );
+    incrementScore = () => {
+        if(!this.state.showOverlay){
+            this.setState(
+                ({score}) => {
+                    const increase = Math.floor(score / 150);
+                    const complexity = increase < 3 ? 3 : increase;
+
+                    return {score: score + 1, complexity};
+                },
+                () => setTimeout(this.incrementScore, 100)
+            );
+        }
     };
 
     setupCollisionHandler = engine => {
@@ -89,8 +97,12 @@ class App extends PureComponent {
                 });
                 Matter.Body.setPosition(pairs[0].bodyB, {
                     x: randomInt(1, width - 30),
-                    y: randomInt(0, -200)
+                    y: randomInt(0, -100)
                 });
+            }
+
+            if (objA === "rocket" && objB === "obstacle") {
+                this.setState({showOverlay: true})
             }
         });
     };
@@ -195,6 +207,15 @@ class App extends PureComponent {
         return {obstacles, bodies};
     }
 
+    get initState() {
+        return {
+            complexity: 3,
+            score: 0,
+            entities: this.entities,
+            showOverlay: false
+        };
+    }
+
     get entities() {
         const engine = Matter.Engine.create({enableSleeping: false});
         const world = engine.world;
@@ -231,15 +252,37 @@ class App extends PureComponent {
     }
 
     render() {
+        const {showOverlay, complexity, entities, score} = this.state;
         return (
             <GameEngine
                 style={styles.container}
                 ref={"engine"}
                 systems={[Physics, Tilt, Trajectory]}
-                entities={this.state.entities}
+                entities={entities}
             >
-                <Score score={this.state.score}/>
+                <Score score={score} complexity={complexity} />
                 <StatusBar hidden={true}/>
+                <Overlay isVisible={showOverlay}>
+                    <ImageBackground source={overlayBack} style={styles.overlay} imageStyle={{opacity:0.8, backgroundColor: 'rgba(0,0,0,.6)'}}>
+                        <Text h1 style={styles.overlayText}>Score</Text>
+                        <Text h3 style={styles.overlayText}>{score}</Text>
+                        <Button
+                            title="Restart"
+                            buttonStyle={styles.button}
+                            titleStyle={styles.buttonTitle}
+                            onPress={this.reloadApp}
+                            icon={
+                                <Icon
+                                    name="rocket"
+                                    size={25}
+                                    type='font-awesome'
+                                    color="#BB1F13"
+                                />
+                            }
+                            iconRight
+                        />
+                    </ImageBackground>
+                </Overlay>
             </GameEngine>
         );
     }
@@ -249,6 +292,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#9d9d9d"
+    },
+    overlayText: {
+        color: '#FFF',
+    },
+    overlay: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%'
+    },
+    button: {
+        backgroundColor: '#FFF',
+        marginVertical: 40,
+    },
+    buttonTitle: {
+        color: "#BB1F13",
+        fontSize: 25
     }
 });
 

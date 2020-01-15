@@ -9,20 +9,20 @@
     "rn-debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
   },
   "dependencies": {
-    "expo": "^34.0.1",
-    "expo-sensors": "~6.0.0",
+    "expo": "^36.0.0",
+    "expo-sensors": "~8.0.0",
     "matter": "^0.2.0",
     "matter-js": "^0.14.2",
     "random-int": "^2.0.1",
-    "react": "16.8.3",
-    "react-dom": "^16.8.6",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.1.tar.gz",
     "react-native-elements": "^1.2.3",
     "react-native-game-engine": "^0.12.3",
-    "react-native-web": "^0.11.4"
+    "react-native-web": "^0.11.7"
   },
   "devDependencies": {
-    "babel-preset-expo": "^6.0.0",
+    "babel-preset-expo": "^8.0.0",
     "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.4.0",

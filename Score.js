@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 
-const Score = ({score}) => {
+const Score = ({score, complexity}) => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{score || 0}</Text>
