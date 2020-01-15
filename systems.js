@@ -11,8 +11,8 @@ const Tilt = state => {
 
   if (xPos >= width - 25 && xTilt > 0) {
     xPos = width - 25;
-  } else if (xPos <= 0 && xTilt < 0) {
-    xPos = 0;
+  } else if (xPos <= 25 && xTilt < 0) {
+    xPos = 25;
   } else {
     xPos = xPos + xTilt * 5;
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Dimensions, View, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 
 import rocket from "./assets/images/rocketwithflames.gif";
 import satellite from "./assets/images/satellite.png";
@@ -8,15 +8,11 @@ import ufo from "./assets/images/ufo.gif";
 
 import star from "./assets/images/star.png";
 
-const { height, width } = Dimensions.get("window");
-
-const BODY_DIAMETER = Math.trunc(Math.max(width, height) * 0.05);
-
 const Rocket = ({ body, size }) => {
   const { position } = body;
   const sizeWidth = size[0];
   const sizeHeight = size[1];
-  const x = position.x - BODY_DIAMETER / 2;
+  const x = position.x - sizeWidth / 2;
   const y = position.y;
 
   return (
@@ -39,7 +35,7 @@ const Satellite = ({ body, size }) => {
   const { position } = body;
   const sizeWidth = size[0];
   const sizeHeight = size[1];
-  let x = position.x - BODY_DIAMETER / 2;
+  let x = position.x - sizeWidth / 2;
   const y = position.y;
 
   return (
@@ -62,7 +58,7 @@ const Planet = ({ body, size }) => {
   const sizeWidth = size[0];
   const sizeHeight = size[1];
   const { position } = body;
-  let x = position.x - BODY_DIAMETER / 2;
+  let x = position.x - sizeWidth / 2;
   const y = position.y;
 
   return (

@@ -15,11 +15,13 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         borderRadius: 10,
         margin: 25,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        minWidth: 50
     },
     text: {
         fontSize: 20,
         padding: 10,
+        textAlign: 'center'
     }
 });
 
