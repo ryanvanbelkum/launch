@@ -1,12 +1,11 @@
 import React from "react";
 import { StyleSheet, View, Image } from "react-native";
 
-import rocket from "./assets/images/rocketwithflames.gif";
-import satellite from "./assets/images/satellite.png";
-import planet from "./assets/images/planet.png";
-import ufo from "./assets/images/ufo.gif";
-
-import star from "./assets/images/star.png";
+import rocket from "../../assets/images/rocketwithflames.gif";
+import satellite from "../../assets/images/satellite.png";
+import planet from "../../assets/images/planet.png";
+import ufo from "../../assets/images/ufo.gif";
+import star from "../../assets/images/star.png";
 
 const Rocket = ({ body, size }) => {
   const { position } = body;

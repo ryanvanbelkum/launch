@@ -1,9 +1,10 @@
 {
   "expo": {
-    "name": "launch",
-    "slug": "launch",
+    "name": "Shaky Shuttle",
+    "slug": "shaky-shuttle",
     "privacy": "public",
     "sdkVersion": "36.0.0",
+    "scheme": "shakyshuttle",
     "platforms": [
       "ios",
       "android"
@@ -23,7 +24,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.midcoast.shakyshuttle",
+      "supportsTablet": false,
+      "buildNumber": "0.0.1"
+    },
+    "android": {
+      "package": "com.midcoast.shakyshuttle",
+      "versionCode": 1,
+      "permissions": []
     }
   }
 }
