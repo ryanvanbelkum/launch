@@ -78,7 +78,7 @@ class Game extends PureComponent {
     if (!showOverlay && appState === 'active') {
       this.setState(
         ({ score }) => {
-          const increase = Math.floor(score / 150);
+          const increase = Math.floor(score / 100);
           const complexity = increase < 3 ? 3 : increase;
 
           return { score: score + 1, complexity };

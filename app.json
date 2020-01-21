@@ -32,6 +32,7 @@
       "package": "com.midcoast.shakyshuttle",
       "versionCode": 1,
       "permissions": []
-    }
+    },
+    "description": ""
   }
 }
