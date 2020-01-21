@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ImageBackground, AsyncStorage } from 'react-native';
+import { ImageBackground, AsyncStorage, View } from 'react-native';
 import { Button, Icon, Overlay } from 'react-native-elements';
 import overlayBack from '../../assets/images/overlay-back.png';
 import styles from './game-styles';
@@ -9,12 +9,15 @@ import { Text } from '../../components/text/text';
 const KEY = '@shaky-shuttle:high-score';
 
 const GameOver = ({ showOverlay, score, reloadApp }) => {
+  const [highScore, setHighScore] = useState('0');
+
   const storeData = async () => {
     if (showOverlay) {
       try {
-        const highScore = (await AsyncStorage.getItem(KEY)) || '0';
+        const storageHighScore = (await AsyncStorage.getItem(KEY)) || '0';
 
-        if (score > parseInt(highScore, 10)) {
+        setHighScore(storageHighScore);
+        if (score > parseInt(storageHighScore, 10)) {
           await AsyncStorage.setItem(KEY, String(score));
         }
       } catch (error) {
@@ -34,12 +37,13 @@ const GameOver = ({ showOverlay, score, reloadApp }) => {
         style={styles.overlay}
         imageStyle={{ opacity: 0.8, backgroundColor: 'rgba(0,0,0,.6)' }}
       >
-        <Text h1 style={styles.overlayText}>
+        <Text h1 h1Style={styles.overlayText}>
           Score
         </Text>
-        <Text h3 style={styles.overlayText}>
+        <Text h3 h3Style={styles.overlayText}>
           {score}
         </Text>
+        <Text style={styles.overlayText}>High score - {highScore}</Text>
         <Button
           title="Restart"
           buttonStyle={styles.button}

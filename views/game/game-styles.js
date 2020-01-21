@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   },
   overlayText: {
     color: '#FFF',
+    marginVertical: 10
   },
   overlay: {
     justifyContent: 'center',
