@@ -6,7 +6,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "rn-debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
+    "rn-debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'",
+    "build-ios": "expo build:ios",
+    "build-android": "expo build:android"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.5",
@@ -27,7 +29,8 @@
     "react-native-safe-area-view": "^1.0.0",
     "react-native-screens": "2.0.0-alpha.12",
     "react-navigation": "^4.0.10",
-    "react-navigation-stack": "^2.0.15"
+    "react-navigation-stack": "^2.0.15",
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.0.0",

@@ -1,18 +1,20 @@
-import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import React from 'react';
+import { View, Image } from 'react-native';
 
-import rocket from "../../assets/images/rocketwithflames.gif";
-import satellite from "../../assets/images/satellite.png";
-import planet from "../../assets/images/planet.png";
-import ufo from "../../assets/images/ufo.gif";
-import star from "../../assets/images/star.png";
+import rocket from '../../assets/images/rocketwithflames.gif';
+import satellite from '../../assets/images/satellite.png';
+import planet from '../../assets/images/planet.png';
+import ufo from '../../assets/images/ufo.gif';
+import star from '../../assets/images/star.png';
+
+import styles from './renderers-styles';
 
 const Rocket = ({ body, size }) => {
   const { position } = body;
   const sizeWidth = size[0];
   const sizeHeight = size[1];
   const x = position.x - sizeWidth / 2;
-  const y = position.y;
+  const { y } = position;
 
   return (
     <Image
@@ -23,8 +25,8 @@ const Rocket = ({ body, size }) => {
           left: x,
           top: y,
           width: sizeWidth,
-          height: sizeHeight
-        }
+          height: sizeHeight,
+        },
       ]}
     />
   );
@@ -34,8 +36,8 @@ const Satellite = ({ body, size }) => {
   const { position } = body;
   const sizeWidth = size[0];
   const sizeHeight = size[1];
-  let x = position.x - sizeWidth / 2;
-  const y = position.y;
+  const x = position.x - sizeWidth / 2;
+  const { y } = position;
 
   return (
     <Image
@@ -46,8 +48,8 @@ const Satellite = ({ body, size }) => {
           left: x,
           top: y,
           width: sizeWidth,
-          height: sizeHeight
-        }
+          height: sizeHeight,
+        },
       ]}
     />
   );
@@ -57,8 +59,8 @@ const Planet = ({ body, size }) => {
   const sizeWidth = size[0];
   const sizeHeight = size[1];
   const { position } = body;
-  let x = position.x - sizeWidth / 2;
-  const y = position.y;
+  const x = position.x - sizeWidth / 2;
+  const { y } = position;
 
   return (
     <Image
@@ -69,8 +71,8 @@ const Planet = ({ body, size }) => {
           left: x,
           top: y,
           width: sizeWidth,
-          height: sizeHeight
-        }
+          height: sizeHeight,
+        },
       ]}
     />
   );
@@ -92,8 +94,8 @@ const Star = ({ body, size, opacity }) => {
           top: y,
           width: sizeWidth,
           height: sizeHeight,
-          opacity
-        }
+          opacity,
+        },
       ]}
     />
   );
@@ -112,8 +114,8 @@ const UFO = ({ body, size }) => {
         styles.ufo,
         {
           left: x,
-          top: y
-        }
+          top: y,
+        },
       ]}
     />
   );
@@ -129,39 +131,15 @@ const Floor = ({ body, size }) => {
   return (
     <View
       style={{
-        position: "absolute",
+        position: 'absolute',
         left: x,
         top: y,
-        width: width,
-        height: height,
-        backgroundColor: "transparent"
+        width,
+        height,
+        backgroundColor: 'transparent',
       }}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  rocket: {
-    width: 50,
-    height: 100,
-    position: "absolute"
-  },
-  satellite: {
-    position: "absolute"
-  },
-  planet: {
-    width: 75,
-    height: 50,
-    position: "absolute"
-  },
-  ufo: {
-    width: 75,
-    height: 50,
-    position: "absolute"
-  },
-  star: {
-    position: "absolute"
-  }
-});
 
 export { Rocket, Floor, Star, Satellite, Planet, UFO };

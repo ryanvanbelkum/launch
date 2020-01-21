@@ -1,5 +1,5 @@
 import React, {PureComponent} from "react";
-import {StyleSheet, StatusBar, Dimensions, AppState} from "react-native";
+import {StatusBar, Dimensions, AppState} from "react-native";
 import {GameEngine} from "react-native-game-engine";
 import Matter from "matter-js";
 import randomInt from "random-int";
@@ -8,7 +8,7 @@ import GameOver from "./game-over";
 import {Rocket, Floor, Star, Satellite, Planet, UFO} from "./renderers";
 import {Tilt, Physics, Trajectory} from "./systems";
 import {Accelerometer} from "expo-sensors";
-import Score from "./Score";
+import Score from "./score";
 
 const STAR_COUNT = 20;
 const {width, height} = Dimensions.get("window");
@@ -16,7 +16,7 @@ import styles from './game-styles';
 
 class Game extends PureComponent {
     static navigationOptions = {
-        header: null,
+        headerShown: false,
     };
 
     constructor(props) {
