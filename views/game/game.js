@@ -44,15 +44,14 @@ class Game extends PureComponent {
       Matter.World.addBody(world, body);
       const updatedObstacles = {
         ...this.state.entities,
-        physics: {
-          ...this.state.entities.physics,
-          world,
-        },
+        // physics: {
+        //   ...this.state.entities.physics,
+        //   world,
+        // },
         [`obstacle_${this.state.complexity - 1}`]: obstacle,
       };
 
-      this.setState({ entities: updatedObstacles });
-      this.refs.engine.swap(updatedObstacles);
+      this.setState({ entities: updatedObstacles }, () => this.refs.engine.swap(updatedObstacles));
     }
   }
 
@@ -67,8 +66,11 @@ class Game extends PureComponent {
   };
 
   reloadApp = () => {
-    this.setState(this.initState, () => {
-      this.refs.engine.swap(this.entities);
+    Matter.Events.off(this.state.entities.physics.engine); // clear all past events;
+
+    const newState = this.initState;
+    this.setState(newState, () => {
+      this.refs.engine.swap(newState.entities);
       this.incrementScore();
     });
   };
@@ -78,7 +80,7 @@ class Game extends PureComponent {
     if (!showOverlay && appState === 'active') {
       this.setState(
         ({ score }) => {
-          const increase = Math.floor(score / 100);
+          const increase = Math.floor(score / 50);
           const complexity = increase < 3 ? 3 : increase;
 
           return { score: score + 1, complexity };
@@ -157,6 +159,7 @@ class Game extends PureComponent {
     const body = Matter.Bodies.rectangle(randomInt(1, width - 50), randomInt(0, -200), 75, 45, {
       frictionAir: 0.05,
       label: 'obstacle',
+      label2: 'satellite',
       trajectory: randomInt(-5, 5) / 10,
     });
     const satellite = { body, size: [75, 50], renderer: Satellite };
@@ -168,6 +171,7 @@ class Game extends PureComponent {
     const body = Matter.Bodies.rectangle(randomInt(1, width - 50), randomInt(0, -200), 60, 35, {
       frictionAir: 0.05,
       label: 'obstacle',
+      label2: 'planet',
       trajectory: randomInt(-5, 5) / 10,
     });
     const planet = { body, size: [75, 50], renderer: Planet };
@@ -179,6 +183,7 @@ class Game extends PureComponent {
     const body = Matter.Bodies.rectangle(randomInt(1, width - 50), randomInt(0, -200), 50, 20, {
       frictionAir: 0.05,
       label: 'obstacle',
+      label2: 'ufo',
       trajectory: randomInt(-5, 5) / 10,
     });
     const ufo = { body, size: [50, 20], renderer: UFO };

@@ -16,9 +16,11 @@ const GameOver = ({ showOverlay, score, reloadApp }) => {
       try {
         const storageHighScore = (await AsyncStorage.getItem(KEY)) || '0';
 
-        setHighScore(storageHighScore);
         if (score > parseInt(storageHighScore, 10)) {
+          setHighScore(score);
           await AsyncStorage.setItem(KEY, String(score));
+        } else {
+          setHighScore(storageHighScore);
         }
       } catch (error) {
         console.error('error saving high score');

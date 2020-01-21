@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -26,7 +26,7 @@
     "ios": {
       "bundleIdentifier": "com.midcoast.shakyshuttle",
       "supportsTablet": false,
-      "buildNumber": "0.0.2"
+      "buildNumber": "0.0.3"
     },
     "android": {
       "package": "com.midcoast.shakyshuttle",
