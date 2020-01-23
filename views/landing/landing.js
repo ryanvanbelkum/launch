@@ -4,6 +4,8 @@ import { View, AsyncStorage } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Video } from 'expo-av';
 import { Text } from '../../components/text/text';
+import Constants from 'expo-constants';
+
 
 import backgroundVid from '../../assets/video/planet-cartoon-space-animation.mp4';
 import styles from './landing-styles';
@@ -51,6 +53,7 @@ const Landing = ({ navigation }) => {
         titleStyle={styles.buttonTitle}
         onPress={() => navigation.navigate('Game')}
       />
+      <Text style={styles.version}>{Constants.manifest.version}</Text>
     </View>
   );
 };

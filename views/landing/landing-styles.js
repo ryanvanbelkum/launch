@@ -39,6 +39,12 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
   },
+  version: {
+    color: '#FFF',
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+  },
 });
 
 export default styles;

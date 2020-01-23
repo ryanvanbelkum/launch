@@ -4,6 +4,7 @@ import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
 import randomInt from 'random-int';
 import { Accelerometer } from 'expo-sensors';
+import { get } from 'lodash';
 import GameOver from './game-over';
 
 import { Rocket, Floor, Star, Satellite, Planet, UFO } from './renderers';
@@ -66,9 +67,14 @@ class Game extends PureComponent {
   };
 
   reloadApp = () => {
-    Matter.Events.off(this.state.entities.physics.engine); // clear all past events;
+    const { engine } = this.state.entities.physics;
+    Matter.World.clear(engine.world);
+    Matter.Engine.clear(engine);
+    Matter.Events.off(engine, 'collisionStart'); // clear all past events;
 
-    const newState = this.initState;
+    const newState = {
+      ...this.initState,
+    };
     this.setState(newState, () => {
       this.refs.engine.swap(newState.entities);
       this.incrementScore();
@@ -155,41 +161,38 @@ class Game extends PureComponent {
     return { obstacle, body };
   }
 
-  getSatellite() {
+  getSatellite = () => {
     const body = Matter.Bodies.rectangle(randomInt(1, width - 50), randomInt(0, -200), 75, 45, {
       frictionAir: 0.05,
       label: 'obstacle',
-      label2: 'satellite',
       trajectory: randomInt(-5, 5) / 10,
     });
     const satellite = { body, size: [75, 50], renderer: Satellite };
 
     return { obstacle: satellite, body };
-  }
+  };
 
-  getPlanet() {
+  getPlanet = () => {
     const body = Matter.Bodies.rectangle(randomInt(1, width - 50), randomInt(0, -200), 60, 35, {
       frictionAir: 0.05,
       label: 'obstacle',
-      label2: 'planet',
       trajectory: randomInt(-5, 5) / 10,
     });
     const planet = { body, size: [75, 50], renderer: Planet };
 
     return { obstacle: planet, body };
-  }
+  };
 
-  getUFO() {
+  getUFO = () => {
     const body = Matter.Bodies.rectangle(randomInt(1, width - 50), randomInt(0, -200), 50, 20, {
       frictionAir: 0.05,
       label: 'obstacle',
-      label2: 'ufo',
       trajectory: randomInt(-5, 5) / 10,
     });
     const ufo = { body, size: [50, 20], renderer: UFO };
 
     return { obstacle: ufo, body };
-  }
+  };
 
   get obstacles() {
     const obstacles = {};
@@ -211,11 +214,13 @@ class Game extends PureComponent {
       entities: this.entities,
       showOverlay: false,
       appState: 'active',
+      run: 0,
     };
   }
 
   get entities() {
-    const engine = Matter.Engine.create({ enableSleeping: false });
+    const engine =
+      get(this, 'state.entities.physics.engine') || Matter.Engine.create({ enableSleeping: false });
     const { world } = engine;
     const rocket = Matter.Bodies.rectangle(width / 2, height - 200, 25, 50, {
       isStatic: true,
@@ -250,7 +255,7 @@ class Game extends PureComponent {
   }
 
   render() {
-    const { showOverlay, complexity, entities, score, appState } = this.state;
+    const { showOverlay, entities, score, appState } = this.state;
     return (
       <GameEngine
         style={styles.container}
@@ -259,7 +264,7 @@ class Game extends PureComponent {
         entities={entities}
         running={appState === 'active'}
       >
-        <Score score={score} complexity={complexity} />
+        <Score score={score} />
         <StatusBar hidden />
         <GameOver showOverlay={showOverlay} score={score} reloadApp={this.reloadApp} />
       </GameEngine>
