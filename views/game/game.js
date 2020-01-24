@@ -13,7 +13,10 @@ import Score from './score';
 import styles from './game-styles';
 
 const STAR_COUNT = 20;
+const INIT_COMPLEXITY = 3;
 const { width, height } = Dimensions.get('window');
+
+let COUNTER = 1;
 
 class Game extends PureComponent {
   static navigationOptions = {
@@ -38,19 +41,18 @@ class Game extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.complexity !== prevState.complexity) {
+    const { complexity } = this.state;
+    if (complexity !== prevState.complexity && complexity !== INIT_COMPLEXITY) {
       const { world } = this.refs.engine.props.entities.physics;
       const { obstacle, body } = this.obstacle;
 
       Matter.World.addBody(world, body);
       const updatedObstacles = {
         ...this.state.entities,
-        // physics: {
-        //   ...this.state.entities.physics,
-        //   world,
-        // },
-        [`obstacle_${this.state.complexity - 1}`]: obstacle,
+        [`obstacle_${COUNTER}`]: obstacle,
       };
+
+      COUNTER += 1;
 
       this.setState({ entities: updatedObstacles }, () => this.refs.engine.swap(updatedObstacles));
     }
@@ -200,8 +202,10 @@ class Game extends PureComponent {
 
     for (let i = 0; i < 3; i++) {
       const { obstacle, body } = this.obstacle;
-      Object.assign(obstacles, { [`obstacle_${i}`]: obstacle });
+      Object.assign(obstacles, { [`obstacle_${COUNTER}`]: obstacle });
       bodies.push(body);
+
+      COUNTER += 1;
     }
 
     return { obstacles, bodies };
@@ -209,12 +213,12 @@ class Game extends PureComponent {
 
   get initState() {
     return {
-      complexity: 3,
+      complexity: INIT_COMPLEXITY,
       score: 0,
       entities: this.entities,
       showOverlay: false,
       appState: 'active',
-      run: 0,
+      objectCounter: 1,
     };
   }
 
